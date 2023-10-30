@@ -4,7 +4,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -13,7 +12,10 @@ import org.testng.annotations.Test;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class DropdownTest {
+//проверить, что первый чекбокс unchecked, отметить первый чекбокс, проверить что он checked.
+// Проверить, что второй чекбокс checked, сделать unheck, проверить, что он unchecked
+
+public class CheckboxTest {
 
     WebDriver driver;
 
@@ -27,19 +29,17 @@ public class DropdownTest {
     }
 
     @Test
-    public void dropdown() {
-        driver.get("https://the-internet.herokuapp.com/dropdown");
-        Select select = new Select(driver.findElement(By.id("dropdown")));
-        List<WebElement> options = select.getOptions();
+    public void checkboxes() {
+        driver.get("https://the-internet.herokuapp.com/checkboxes");
+        List<WebElement> checkboxes = driver.findElements(By.cssSelector("[type=checkbox]"));
 
-        Assert.assertEquals(options.get(0).getText(), "Please select an option");
-        Assert.assertEquals(options.get(1).getText(), "Option 1");
-        Assert.assertEquals(options.get(2).getText(), "Option 2");
+        Assert.assertFalse(checkboxes.get(0).isSelected());
+        checkboxes.get(0).click();
+        Assert.assertTrue(checkboxes.get(0).isSelected());
 
-        select.selectByVisibleText("Option 1");
-        Assert.assertEquals(select.getFirstSelectedOption().getText(), "Option 1");
-        select.selectByVisibleText("Option 2");
-        Assert.assertEquals(select.getFirstSelectedOption().getText(), "Option 2");
+        Assert.assertTrue(checkboxes.get(1).isSelected());
+        checkboxes.get(1).click();
+        Assert.assertFalse(checkboxes.get(1).isSelected());
     }
 
     @AfterMethod(alwaysRun = true)
