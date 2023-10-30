@@ -22,6 +22,7 @@ public class SortableDataTablesTest {
         driver = new ChromeDriver(options);
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
     }
+
     @Test
     public void sortableDataTable() {
         driver.get("https://the-internet.herokuapp.com/tables");
