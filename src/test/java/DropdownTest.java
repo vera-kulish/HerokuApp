@@ -1,16 +1,20 @@
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class AddRemoveElementsTest {
+public class DropdownTest {
+
 
     WebDriver driver;
 
@@ -24,13 +28,19 @@ public class AddRemoveElementsTest {
     }
 
     @Test
-    public void addRemoveElements() {
-        driver.get("https://the-internet.herokuapp.com/add_remove_elements/");
-        driver.findElement(By.xpath("//button[text()='Add Element']")).click();
-        driver.findElement(By.xpath("//button[text()='Add Element']")).click();
-        driver.findElements(By.xpath("//button[text()='Delete']")).get(1).click();
+    public void dropdown() {
+        driver.get("https://the-internet.herokuapp.com/dropdown");
+        Select select = new Select(driver.findElement(By.id("dropdown")));
+        List<WebElement> options = select.getOptions();
 
-        Assert.assertEquals(driver.findElements(By.xpath("//button[text()='Delete']")).size(), 1);
+        Assert.assertEquals(options.get(0).getText(), "Please select an option");
+        Assert.assertEquals(options.get(1).getText(), "Option 1");
+        Assert.assertEquals(options.get(2).getText(), "Option 2");
+
+        select.selectByVisibleText("Option 1");
+        Assert.assertEquals(select.getFirstSelectedOption().getText(), "Option 1");
+        select.selectByVisibleText("Option 2");
+        Assert.assertEquals(select.getFirstSelectedOption().getText(), "Option 2");
     }
 
     @AfterMethod(alwaysRun = true)
