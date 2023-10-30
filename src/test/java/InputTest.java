@@ -1,5 +1,6 @@
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -8,11 +9,9 @@ import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class CheckboxTest {
+public class InputTest {
 
     WebDriver driver;
 
@@ -27,16 +26,22 @@ public class CheckboxTest {
 
     @Test
     public void checkboxes() {
-        driver.get("https://the-internet.herokuapp.com/checkboxes");
-        List<WebElement> checkboxes = driver.findElements(By.cssSelector("[type=checkbox]"));
+        driver.get("https://the-internet.herokuapp.com/inputs");
+        WebElement input = driver.findElement(By.tagName("input"));
+        input.sendKeys("1234567890");
+        Assert.assertEquals(input.getAttribute("value"), "1234567890");
 
-        Assert.assertFalse(checkboxes.get(0).isSelected());
-        checkboxes.get(0).click();
-        Assert.assertTrue(checkboxes.get(0).isSelected());
+        input.clear();
+        input.sendKeys("asdfghjkl!@#$%^&*()_}{:\":>?><");
+        Assert.assertEquals(input.getAttribute("value"), "");
 
-        Assert.assertTrue(checkboxes.get(1).isSelected());
-        checkboxes.get(1).click();
-        Assert.assertFalse(checkboxes.get(1).isSelected());
+        input.clear();
+        input.sendKeys("1");
+        input.sendKeys(Keys.ARROW_UP);
+        Assert.assertEquals(input.getAttribute("value"), "2");
+
+        input.sendKeys(Keys.ARROW_DOWN);
+        Assert.assertEquals(input.getAttribute("value"), "1");
     }
 
     @AfterMethod(alwaysRun = true)
